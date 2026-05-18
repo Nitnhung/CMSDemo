@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "code": "CNTT-K15A",
+    "name": "Công nghệ thông tin - Khóa 15 A",
+    "studentCount": 2,
+    "startTime": "2026-05-07",
+    "endTime": "2026-05-18"
+  },
+  {
+    "id": 2,
+    "code": "KHMT-K16B",
+    "name": "Khoa học máy tính - Khóa 16 B",
+    "studentCount": 1,
+    "startTime": "2026-05-13",
+    "endTime": "2026-05-26"
+  }
+]

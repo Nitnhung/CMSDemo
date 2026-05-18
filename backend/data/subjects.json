@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "code": "MAD101",
+    "name": "Toán rời rạc",
+    "credits": 3
+  },
+  {
+    "id": 2,
+    "code": "WEB203",
+    "name": "Lập trình Web với VueJS",
+    "credits": 4
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "studentCode": "20240001",
+    "fullName": "Nguyễn Văn An",
+    "dob": "2003-05-15",
+    "gender": "Nam",
+    "classId": 1
+  },
+  {
+    "id": 2,
+    "studentCode": "20240002",
+    "fullName": "Trần Thị Bình",
+    "dob": "2003-10-20",
+    "gender": "Nữ",
+    "classId": 1
+  },
+  {
+    "id": 3,
+    "studentCode": "BH02443",
+    "fullName": "Nguyễn Nhung",
+    "dob": "2026-01-19",
+    "gender": "Nữ",
+    "classId": 2
+  }
+]
