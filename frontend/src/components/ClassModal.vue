@@ -9,50 +9,42 @@
       </div>
 
       <form @submit.prevent="handleSubmit" class="p-6 space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Mã lớp học</label>
-          <input 
-            v-model="formData.code" 
-            type="text" 
-            placeholder="Ví dụ: CNTT-K15A" 
-            class="w-full px-3.5 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm disabled:bg-gray-100 disabled:text-gray-500" 
-            required 
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tên lớp học</label>
-          <input v-model="formData.name" type="text" placeholder="Ví dụ: Công nghệ thông tin K15A" class="w-full px-3.5 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required />
-        </div>
+        <BaseInput
+          v-model="formData.code"
+          label="Mã lớp học"
+          placeholder="Ví dụ: CNTT-K15A"
+          required
+        />
+
+        <BaseInput
+          v-model="formData.name"
+          label="Tên lớp học"
+          placeholder="Ví dụ: Công nghệ thông tin K15A"
+          required
+        />
 
         <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian bắt đầu</label>
-            <input
-              v-model="formData.startTime"
-              type="date"
-              class="w-full px-3.5 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian kết thúc</label>
-            <input
-              v-model="formData.endTime"
-              type="date"
-              class="w-full px-3.5 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              required
-            />
-          </div>
+          <BaseInput
+            v-model="formData.startTime"
+            label="Thời gian bắt đầu"
+            type="date"
+            required
+          />
+          <BaseInput
+            v-model="formData.endTime"
+            label="Thời gian kết thúc"
+            type="date"
+            required
+          />
         </div>
 
-
         <div class="flex justify-end gap-3 pt-2">
-          <button type="button" @click="$emit('close')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+          <BaseButton variant="secondary" @click="$emit('close')">
             Hủy
-          </button>
-          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm">
+          </BaseButton>
+          <BaseButton type="submit">
             {{ editData ? 'Cập nhật' : 'Tạo lớp học' }}
-          </button>
+          </BaseButton>
         </div>
       </form>
     </div>
@@ -61,6 +53,8 @@
 
 <script setup>
 import { reactive, watch } from 'vue'
+import BaseButton from './BaseButton.vue'
+import BaseInput from './BaseInput.vue'
 
 // Định nghĩa nhận dữ liệu editData từ trang cha truyền vào
 const props = defineProps({

@@ -152,11 +152,10 @@ const openClassModalForCreate = () => { selectedClass.value = null; showClassMod
 const openClassModalForEdit = (item) => { selectedClass.value = item; showClassModal.value = true; }
 const handleClassSubmit = async (data) => {
   try {
-    if (selectedClass.value) {
-      await classService.update(selectedClass.value.id, data)
-    } else {
-      await classService.create(data)
-    }
+    selectedClass.value 
+      ? await classService.update(selectedClass.value.id, data) 
+      : await classService.create(data);
+      
     loadData(); showClassModal.value = false;
   } catch (err) { alert(err.response?.data?.message) }
 }
@@ -171,11 +170,10 @@ const openSubjectModalForCreate = () => { selectedSubject.value = null; showSubj
 const openSubjectModalForEdit = (item) => { selectedSubject.value = item; showSubjectModal.value = true; }
 const handleSubjectSubmit = async (data) => {
   try {
-    if (selectedSubject.value) {
-      await subjectService.update(selectedSubject.value.id, data)
-    } else {
-      await subjectService.create(data)
-    }
+    selectedSubject.value 
+      ? await subjectService.update(selectedSubject.value.id, data) 
+      : await subjectService.create(data);
+
     loadData(); showSubjectModal.value = false;
   } catch (err) { alert(err.response?.data?.message) }
 }
@@ -187,33 +185,15 @@ const handleDeleteSubject = async (id) => {
 
 // Logic điều phối Student Modal
 const openStudentModalForCreate = () => { selectedStudent.value = null; showStudentModal.value = true; }
-const openStudentModalForEdit = (student) => {
-  selectedStudent.value = student
-  showStudentModal.value = true
-}
+const openStudentModalForEdit = (student) => { selectedStudent.value = student;  showStudentModal.value = true; }
 const handleStudentSubmit = async (formData) => {
   try {
-    if (selectedStudent.value && selectedStudent.value.id) {
-      // Logic UPDATE
-      const response = await studentService.update(selectedStudent.value.id, {
-        studentCode: formData.studentId,
-        fullName: formData.fullName,
-        dob: formData.dob,
-        gender: formData.gender,
-        classId: formData.classId // Ensure classId is passed for updates if needed, though studentService.update doesn't use it in backend
-      })
-      alert(response.data.message)
-    } else {
-      // Logic CREATE
-      const response = await studentService.create({
-        studentCode: formData.studentId, // Ánh xạ từ studentId trong Modal sang studentCode của Backend
-        fullName: formData.fullName,
-        dob: formData.dob,
-        gender: formData.gender,
-        classId: formData.classId
-      })
-      alert(response.data.message)
-    }
+    // Đẩy toàn bộ logic mapping studentId -> studentCode vào trong studentService
+    const response = (selectedStudent.value && selectedStudent.value.id)
+      ? await studentService.update(selectedStudent.value.id, formData)
+      : await studentService.create(formData);
+
+    alert(response.data.message);
     loadData(); showStudentModal.value = false;
   } catch (err) { alert(err.response?.data?.message || "Thao tác thất bại!") }
 }

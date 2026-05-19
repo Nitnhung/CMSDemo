@@ -96,26 +96,11 @@ const openInfoModal = (student) => {
 
 const handleStudentSubmit = async (formData) => {
   try {
-    if (selectedStudent.value && selectedStudent.value.id) {
-      // Logic UPDATE
-      const response = await studentService.update(selectedStudent.value.id, {
-        studentCode: formData.studentId,
-        fullName: formData.fullName,
-        dob: formData.dob,
-        gender: formData.gender
-      })
-      alert(response.data.message)
-    } else {
-      // Logic CREATE
-      const response = await studentService.create({
-        studentCode: formData.studentId,
-        fullName: formData.fullName,
-        dob: formData.dob,
-        gender: formData.gender,
-        classId: currentClassId.value
-      })
-      alert(response.data.message)
-    }
+    const response = (selectedStudent.value && selectedStudent.value.id)
+      ? await studentService.update(selectedStudent.value.id, formData)
+      : await studentService.create({ ...formData, classId: currentClassId.value });
+
+    alert(response.data.message);
     fetchStudents()
     showStudentModal.value = false
   } catch (error) {

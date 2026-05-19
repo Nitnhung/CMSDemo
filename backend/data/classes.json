@@ -11,8 +11,16 @@
     "id": 2,
     "code": "KHMT-K16B",
     "name": "Khoa học máy tính - Khóa 16 B",
-    "studentCount": 1,
+    "studentCount": 0,
     "startTime": "2026-05-13",
     "endTime": "2026-05-26"
+  },
+  {
+    "id": 3,
+    "code": "jhgfd",
+    "name": "oiuytr",
+    "startTime": "2026-05-05",
+    "endTime": "2026-05-29",
+    "studentCount": 1
   }
 ]
