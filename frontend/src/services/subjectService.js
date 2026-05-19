@@ -1,9 +1,9 @@
-import api from './api';
+import subjectsApi from '../api/subjects'
 
 export default {
-  getAll: () => api.get('/subjects'),
-  create: (data) => api.post('/subjects', data),
+  getAll: () => subjectsApi.getAll(),
+  create: (data) => subjectsApi.create(data),
   // backend dùng route /api/subjects/:id (id số)
-  update: (id, data) => api.put(`/subjects/${id}`, data),
-  delete: (id) => api.delete(`/subjects/${id}`)
+  update: (id, data) => subjectsApi.update(id, data),
+  delete: (id) => subjectsApi.delete(id)
 };

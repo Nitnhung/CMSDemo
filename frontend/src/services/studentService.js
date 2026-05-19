@@ -1,9 +1,9 @@
-import api from './api';
+import studentsApi from '../api/students'
 
 export default {
-  getAll: () => api.get('/students'),
-  getByClass: (classId) => api.get(`/students/${classId}`),
-  create: (data) => api.post('/students', data),
-  update: (id, data) => api.put(`/students/${id}`, data),
-  delete: (id) => api.delete(`/students/${id}`)
+  getAll: () => studentsApi.getAll(),
+  getByClass: (classId) => studentsApi.getByClass(classId),
+  create: (data) => studentsApi.create(data),
+  update: (id, data) => studentsApi.update(id, data),
+  delete: (id) => studentsApi.delete(id)
 };

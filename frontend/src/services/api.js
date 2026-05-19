@@ -1,11 +1,5 @@
-import axios from 'axios'
+// Deprecated: Axios client moved to `src/api/client.js`.
+// This file is kept temporarily for backward compatibility.
 
-const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
-  timeout: 15000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+export { default } from '../api/client'
 
-export default api
