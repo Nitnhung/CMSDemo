@@ -1,28 +1,22 @@
 <template>
   <div class="space-y-1">
-    <label v-if="label" class="block text-sm font-medium text-gray-700">
-      {{ label }}
-    </label>
+    <label v-if="label" class="text-xs font-bold text-gray-600 uppercase">{{ label }}</label>
     <input
-      v-bind="$attrs"
+      :type="type || 'text'"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-      class="w-full px-3.5 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm disabled:bg-gray-100 disabled:text-gray-500 transition-shadow"
+      v-bind="$attrs"
+      class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
     />
   </div>
 </template>
 
 <script setup>
 defineProps({
-  label: {
-    type: String,
-    default: '',
-  },
-  modelValue: {
-    type: [String, Number],
-    default: '',
-  },
-});
+  label: String,
+  modelValue: [String, Number],
+  type: String
+})
 
-defineEmits(['update:modelValue']);
+defineEmits(['update:modelValue'])
 </script>

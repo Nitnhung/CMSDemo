@@ -6,9 +6,9 @@
         <p class="text-sm text-gray-500">Quản lý danh sách lớp học và chương trình môn học</p>
       </div>
       <div class="flex gap-3">
-        <button @click="openStudentModalForCreate" class="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg border text-sm">+ Thêm sinh viên</button>
-        <button @click="openSubjectModalForCreate" class="bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg border text-sm">+ Thêm môn học</button>
-        <button @click="openClassModalForCreate" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm shadow-sm">+ Thêm lớp học</button>
+        <BaseButton variant="secondary" @click="openStudentModalForCreate">+ Thêm sinh viên</BaseButton>
+        <BaseButton variant="secondary" @click="openSubjectModalForCreate">+ Thêm môn học</BaseButton>
+        <BaseButton variant="primary" @click="openClassModalForCreate">+ Thêm lớp học</BaseButton>
       </div>
     </div>
 
@@ -98,120 +98,51 @@
     <ClassModal :isOpen="showClassModal" :editData="selectedClass" @close="showClassModal = false" @submit="handleClassSubmit" />
     <SubjectModal :isOpen="showSubjectModal" :editData="selectedSubject" @close="showSubjectModal = false" @submit="handleSubjectSubmit" />
     <StudentModal :isOpen="showStudentModal" :editData="selectedStudent" @close="showStudentModal = false" @submit="handleStudentSubmit" />
-    <StudentInfoModal :isOpen="showInfoModal" :student="infoStudent" @close="showInfoModal = false" />
+    <StudentInfoModal 
+      :isOpen="showInfoModal" 
+      :student="infoStudent" 
+      :subjects="studentSubjects" 
+      :all-subjects="subjectsList"
+      @close="showInfoModal = false" 
+      @add-subject="addSubjectToStudent"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import ClassModal from '../components/ClassModal.vue'
-import SubjectModal from '../components/SubjectModal.vue'
-import StudentModal from '../components/StudentModal.vue'
-import StudentInfoModal from '../components/StudentInfoModal.vue'
-import classService from '../services/classService'
-import subjectService from '../services/subjectService'
-import studentService from '../services/studentService'
+import BaseButton from '../components/BaseButton.vue'
+import ClassModal from '../components/modals/ClassModal.vue'
+import SubjectModal from '../components/modals/SubjectModal.vue'
+import StudentModal from '../components/modals/StudentModal.vue'
+import StudentInfoModal from '../components/modals/StudentInfoModal.vue'
+import { useDashboard } from '../composables/useDashboard'
 
-const showClassModal = ref(false)
-const showSubjectModal = ref(false)
-const showStudentModal = ref(false)
-const showInfoModal = ref(false)
-const classesList = ref([])
-const subjectsList = ref([])
-const studentsList = ref([])
-
-const selectedClass = ref(null)
-const selectedSubject = ref(null)
-const selectedStudent = ref(null)
-const infoStudent = ref(null)
-
-const loadData = async () => {
-  try {
-    // Gọi các API độc lập để tránh một lỗi làm hỏng toàn bộ trang
-    const fetchClasses = classService.getAll().then(res => classesList.value = res.data).catch(err => console.error("Lỗi tải lớp học:", err));
-    const fetchSubjects = subjectService.getAll().then(res => subjectsList.value = res.data).catch(err => console.error("Lỗi tải môn học:", err));
-    const fetchStudents = studentService.getAll()
-      .then(res => {
-        studentsList.value = res.data || []
-      })
-      .catch(err => {
-        console.error("Lỗi tải danh sách sinh viên:", err)
-        studentsList.value = []
-      });
-
-    await Promise.allSettled([fetchClasses, fetchSubjects, fetchStudents]);
-  } catch (error) { 
-    console.error("Lỗi hệ thống khi tải dữ liệu:", error);
-  }
-}
-
-onMounted(loadData)
-
-// Logic điều phối Class Modal
-const openClassModalForCreate = () => { selectedClass.value = null; showClassModal.value = true; }
-const openClassModalForEdit = (item) => { selectedClass.value = item; showClassModal.value = true; }
-const handleClassSubmit = async (data) => {
-  try {
-    selectedClass.value 
-      ? await classService.update(selectedClass.value.id, data) 
-      : await classService.create(data);
-      
-    loadData(); showClassModal.value = false;
-  } catch (err) { alert(err.response?.data?.message) }
-}
-const handleDeleteClass = async (id) => {
-  if (confirm("Xóa lớp này sẽ ảnh hưởng dữ liệu, bạn chắc chắn chứ?")) {
-    await classService.delete(id); loadData();
-  }
-}
-
-// Logic điều phối Subject Modal
-const openSubjectModalForCreate = () => { selectedSubject.value = null; showSubjectModal.value = true; }
-const openSubjectModalForEdit = (item) => { selectedSubject.value = item; showSubjectModal.value = true; }
-const handleSubjectSubmit = async (data) => {
-  try {
-    selectedSubject.value 
-      ? await subjectService.update(selectedSubject.value.id, data) 
-      : await subjectService.create(data);
-
-    loadData(); showSubjectModal.value = false;
-  } catch (err) { alert(err.response?.data?.message) }
-}
-const handleDeleteSubject = async (id) => {
-  if (confirm("Xác nhận xóa môn học này?")) {
-    await subjectService.delete(id); loadData();
-  }
-}
-
-// Logic điều phối Student Modal
-const openStudentModalForCreate = () => { selectedStudent.value = null; showStudentModal.value = true; }
-const openStudentModalForEdit = (student) => { selectedStudent.value = student;  showStudentModal.value = true; }
-const handleStudentSubmit = async (formData) => {
-  try {
-    // Đẩy toàn bộ logic mapping studentId -> studentCode vào trong studentService
-    const response = (selectedStudent.value && selectedStudent.value.id)
-      ? await studentService.update(selectedStudent.value.id, formData)
-      : await studentService.create(formData);
-
-    alert(response.data.message);
-    loadData(); showStudentModal.value = false;
-  } catch (err) { alert(err.response?.data?.message || "Thao tác thất bại!") }
-}
-
-const handleDeleteStudent = async (studentId) => {
-  if (confirm(`Bạn có chắc chắn muốn xóa sinh viên này không?`)) {
-    try {
-      const response = await studentService.delete(studentId)
-      alert(response.data.message)
-      loadData() // Reload danh sách
-    } catch (error) {
-      alert("Xóa sinh viên thất bại!")
-    }
-  }
-}
-
-const openInfoModal = (student) => {
-  infoStudent.value = student
-  showInfoModal.value = true
-}
+const {
+  showClassModal,
+  showSubjectModal,
+  showStudentModal,
+  showInfoModal,
+  classesList,
+  subjectsList,
+  studentsList,
+  studentSubjects,
+  selectedClass,
+  selectedSubject,
+  selectedStudent,
+  infoStudent,
+  openClassModalForCreate,
+  openClassModalForEdit,
+  handleClassSubmit,
+  handleDeleteClass,
+  openSubjectModalForCreate,
+  openSubjectModalForEdit,
+  handleSubjectSubmit,
+  handleDeleteSubject,
+  openStudentModalForCreate,
+  openStudentModalForEdit,
+  handleStudentSubmit,
+  handleDeleteStudent,
+    openInfoModal,
+    addSubjectToStudent
+} = useDashboard()
 </script>

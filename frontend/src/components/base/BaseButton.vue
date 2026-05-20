@@ -1,4 +1,3 @@
-<!-- Đã di chuyển từ services/ sang components/ -->
 <template>
   <button
     :type="type"
@@ -37,3 +36,4 @@ const variantClasses = {
   link: 'text-blue-600 hover:underline p-0 focus:ring-blue-400',
 };
 </script>
+

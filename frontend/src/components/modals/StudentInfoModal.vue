@@ -1,4 +1,5 @@
 <template>
+  <!-- Modal Wrapper -->
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100">
       <!-- Header -->
@@ -36,11 +37,7 @@
             <span>📚 Các môn đang học</span>
           </h4>
           
-          <div v-if="loading" class="flex items-center justify-center py-4">
-            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-          </div>
-          
-          <div v-else-if="subjects.length" class="flex flex-wrap gap-2">
+          <div v-if="subjects && subjects.length" class="flex flex-wrap gap-2">
             <span 
               v-for="sub in subjects" 
               :key="sub.id" 
@@ -52,6 +49,23 @@
           
           <div v-else class="text-center py-4 bg-gray-50 rounded-lg text-gray-400 italic">
             Chưa đăng ký môn học nào
+          </div>
+
+          <!-- Add Subject Section -->
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <h5 class="font-semibold text-gray-700 mb-2">Thêm môn học mới</h5>
+            <div class="flex gap-2">
+              <select v-model="selectedSubjectId" class="border border-gray-300 rounded-lg p-2 text-sm flex-1 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">-- Chọn môn học --</option>
+                <option v-for="sub in availableSubjects" :key="sub.id" :value="sub.id">
+                  {{ sub.name }} ({{ sub.code }})
+                </option>
+              </select>
+              <button 
+                @click="handleAddSubject" 
+                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              >Thêm</button>
+            </div>
           </div>
         </div>
       </div>
@@ -70,41 +84,38 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import studentSubjectsService from '../services/studentSubjectsService'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   isOpen: Boolean,
-  student: Object
+  student: Object,
+  subjects: {
+    type: Array,
+    default: () => []
+  },
+  allSubjects: { // Prop mới để nhận tất cả các môn học có thể thêm
+    type: Array,
+    default: () => []
+  }
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close', 'addSubject'])
 
-const subjects = ref([])
-const loading = ref(false)
+const selectedSubjectId = ref('')
 
-watch(
-  () => [props.isOpen, props.student?.id],
-  async ([isOpen, studentId]) => {
-    if (!isOpen) {
-      subjects.value = []
-      loading.value = false
-      return
-    }
+// Computed property để lọc ra các môn học mà sinh viên chưa đăng ký
+const availableSubjects = computed(() => {
+  if (!props.allSubjects || !props.subjects) return []
+  const studentSubjectIds = new Set(props.subjects.map(s => s.id))
+  return props.allSubjects.filter(sub => !studentSubjectIds.has(sub.id))
+})
 
-    if (!studentId) return
-
-    subjects.value = []
-    loading.value = true
-    try {
-      const response = await studentSubjectsService.getByStudent(studentId)
-      subjects.value = response.data || []
-    } catch (error) {
-      console.error('Lỗi khi tải môn học của sinh viên:', error)
-      subjects.value = []
-    } finally {
-      loading.value = false
-    }
+const handleAddSubject = () => {
+  if (selectedSubjectId.value) {
+    emit('addSubject', props.student.id, Number(selectedSubjectId.value))
+    selectedSubjectId.value = '' // Reset lựa chọn sau khi thêm
+  } else {
+    alert('Vui lòng chọn một môn học để thêm.')
   }
-)
+}
 </script>

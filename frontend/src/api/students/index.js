@@ -1,12 +1,10 @@
-import client from '../client'
+import axiosClient from '../axiosClient';
+import { ENDPOINTS } from '../endpoints';
 
-const studentsApi = {
-  getAll: () => client.get('/students'),
-  getByClass: (classId) => client.get(`/students/${classId}`),
-  create: (data) => client.post('/students', data),
-  update: (id, data) => client.put(`/students/${id}`, data),
-  delete: (id) => client.delete(`/students/${id}`)
-}
-
-export default studentsApi
-
+export default {
+  getAll: () => axiosClient.get(ENDPOINTS.STUDENTS),
+  getByClass: (classId) => axiosClient.get(`${ENDPOINTS.STUDENTS}/class/${classId}`),
+  create: (data) => axiosClient.post(ENDPOINTS.STUDENTS, data),
+  update: (id, data) => axiosClient.put(`${ENDPOINTS.STUDENTS}/${id}`, data),
+  delete: (id) => axiosClient.delete(`${ENDPOINTS.STUDENTS}/${id}`),
+};
