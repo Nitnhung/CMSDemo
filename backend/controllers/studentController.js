@@ -10,9 +10,16 @@ export const getAllStudents = (req, res) => {
 }
 
 export const getStudentsByClass = (req, res) => {
-  const classId = Number(req.params.classId)
+  // Kiểm tra cả 'classId' và 'id' để tránh lỗi mismatch tên param trong routes
+  const classId = Number(req.params.classId || req.params.id)
+  
+  if (Number.isNaN(classId)) {
+    return res.status(400).json({ message: 'ID lớp học không hợp lệ hoặc không tìm thấy' })
+  }
+
   const students = getCollection('students')
-  res.json(students.filter((s) => s.classId === classId))
+  const filteredStudents = students.filter((s) => Number(s.classId) === classId)
+  res.json(filteredStudents)
 }
 
 export const createStudent = (req, res) => {
@@ -43,6 +50,7 @@ export const createStudent = (req, res) => {
 
 export const updateStudent = (req, res) => {
   const id = Number(req.params.id)
+  if (Number.isNaN(id)) return res.status(400).json({ message: 'ID sinh viên không hợp lệ!' })
   const { studentCode, fullName, dob, gender } = req.body
   const students = getCollection('students')
   const student = students.find((s) => s.id === id)
@@ -62,6 +70,7 @@ export const updateStudent = (req, res) => {
 
 export const deleteStudent = (req, res) => {
   const id = Number(req.params.id)
+  if (Number.isNaN(id)) return res.status(400).json({ message: 'ID sinh viên không hợp lệ!' })
   const students = getCollection('students')
   const idx = students.findIndex((s) => s.id === id)
   if (idx === -1) return res.status(404).json({ message: 'Không tìm thấy sinh viên!' })
@@ -71,7 +80,8 @@ export const deleteStudent = (req, res) => {
   save('students')
 
   const links = getCollection('student_subjects')
-  const filtered = links.filter((row) => row.studentId !== id)
+  // Đảm bảo ép kiểu khi xóa các liên kết môn học liên quan
+  const filtered = links.filter((row) => Number(row.studentId) !== id)
   if (filtered.length !== links.length) {
     links.length = 0
     links.push(...filtered)

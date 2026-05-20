@@ -26,6 +26,7 @@ export const createClass = (req, res) => {
 
 export const updateClass = (req, res) => {
   const id = Number(req.params.id)
+  if (Number.isNaN(id)) return res.status(400).json({ message: 'ID lớp không hợp lệ!' })
   const { code, name, startTime, endTime } = req.body
   const classes = getCollection('classes')
   const target = classes.find((c) => c.id === id)
@@ -45,6 +46,7 @@ export const updateClass = (req, res) => {
 
 export const deleteClass = (req, res) => {
   const id = Number(req.params.id)
+  if (Number.isNaN(id)) return res.status(400).json({ message: 'ID lớp không hợp lệ!' })
   const classes = getCollection('classes')
   const idx = classes.findIndex((c) => c.id === id)
   if (idx === -1) return res.status(404).json({ message: 'Không tìm thấy lớp học!' })
