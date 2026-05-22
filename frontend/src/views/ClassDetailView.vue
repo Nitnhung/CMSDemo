@@ -50,73 +50,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import StudentModal from '../components/StudentModal.vue'
-import StudentInfoModal from '../components/StudentInfoModal.vue'
-import studentService from '../services/studentService'
+import StudentModal from '../components/modals/StudentModal.vue'
+import StudentInfoModal from '../components/modals/StudentInfoModal.vue'
+import { useClassDetail } from '../composables/useClassDetail'
 
-const route = useRoute()
-const currentClassId = computed(() => route.params.id)
-
-const showStudentModal = ref(false)
-const showInfoModal = ref(false)
-const studentsList = ref([])
-const selectedStudent = ref(null) // Lưu thông tin sinh viên đang được chọn để Sửa
-const infoStudent = ref(null)
-
-const fetchStudents = async () => {
-  if (!currentClassId.value) return
-  try {
-    const response = await studentService.getByClass(currentClassId.value)
-    studentsList.value = response.data || []
-  } catch (error) {
-    console.error('Lỗi tải danh sách sinh viên:', error)
-    studentsList.value = []
-  }
-}
-
-// Theo dõi sự thay đổi của ID lớp trên URL để tải lại dữ liệu
-watch(() => route.params.id, fetchStudents, { immediate: true })
-
-const openModalForCreate = () => {
-  selectedStudent.value = { classId: Number(currentClassId.value) } // Truyền classId mặc định vào modal để tự động chọn lớp
-  showStudentModal.value = true
-}
-
-const openModalForEdit = (student) => {
-  selectedStudent.value = student // Gán dữ liệu sinh viên cần sửa truyền vào modal
-  showStudentModal.value = true
-}
-
-const openInfoModal = (student) => {
-  infoStudent.value = student
-  showInfoModal.value = true
-}
-
-const handleStudentSubmit = async (formData) => {
-  try {
-    const response = (selectedStudent.value && selectedStudent.value.id)
-      ? await studentService.update(selectedStudent.value.id, formData)
-      : await studentService.create({ ...formData, classId: currentClassId.value });
-
-    alert(response.data.message);
-    fetchStudents()
-    showStudentModal.value = false
-  } catch (error) {
-    alert(error.response?.data?.message || "Thao tác thất bại!")
-  }
-}
-
-const handleDeleteStudent = async (studentId) => {
-  if (confirm(`Bạn có chắc chắn muốn xóa sinh viên có MSSV: ${studentId} ra khỏi lớp không?`)) {
-    try {
-      const response = await studentService.delete(studentId)
-      alert(response.data.message)
-      fetchStudents() // Reload danh sách và cập nhật sĩ số
-    } catch (error) {
-      alert("Xóa sinh viên thất bại!")
-    }
-  }
-}
+const {
+  currentClassId, showStudentModal, showInfoModal, studentsList,
+  selectedStudent, infoStudent,
+  openModalForCreate, openModalForEdit, openInfoModal,
+  handleStudentSubmit, fetchStudents, handleDeleteStudent
+} = useClassDetail()
 </script>

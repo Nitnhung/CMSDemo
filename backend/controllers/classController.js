@@ -9,8 +9,8 @@ export const getAllClasses = (req, res) => {
 }
 
 export const createClass = (req, res) => {
-  const { code, name, startTime, endTime } = req.body
-  if (!code || !name || !startTime || !endTime) return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' })
+  const { code, name, startTime, endTime, subjectId } = req.body
+  if (!code || !name || !startTime || !endTime || !subjectId) return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' })
 
   const classes = getCollection('classes')
   if (classes.some((c) => c.code.toLowerCase() === code.toLowerCase())) {
@@ -18,7 +18,7 @@ export const createClass = (req, res) => {
   }
 
   const id = nextId(classes)
-  const newClass = { id, code, name, startTime, endTime, studentCount: 0 }
+  const newClass = { id, code, name, startTime, endTime, subjectId: Number(subjectId), studentCount: 0 }
   classes.push(newClass)
   save('classes')
   res.status(201).json({ message: 'Tạo lớp học thành công!', data: newClass })
@@ -26,7 +26,8 @@ export const createClass = (req, res) => {
 
 export const updateClass = (req, res) => {
   const id = Number(req.params.id)
-  const { code, name, startTime, endTime } = req.body
+  if (Number.isNaN(id)) return res.status(400).json({ message: 'ID lớp không hợp lệ!' })
+  const { code, name, startTime, endTime, subjectId } = req.body
   const classes = getCollection('classes')
   const target = classes.find((c) => c.id === id)
   if (!target) return res.status(404).json({ message: 'Không tìm thấy lớp học!' })
@@ -39,12 +40,14 @@ export const updateClass = (req, res) => {
   target.name = name
   target.startTime = startTime
   target.endTime = endTime
+  target.subjectId = Number(subjectId)
   save('classes')
-  res.json({ message: 'Cập nhật thông tin lớp thành công!', data: { id, code, name, startTime, endTime, studentCount: target.studentCount } })
+  res.json({ message: 'Cập nhật thông tin lớp thành công!', data: { id, code, name, startTime, endTime, subjectId: target.subjectId, studentCount: target.studentCount } })
 }
 
 export const deleteClass = (req, res) => {
   const id = Number(req.params.id)
+  if (Number.isNaN(id)) return res.status(400).json({ message: 'ID lớp không hợp lệ!' })
   const classes = getCollection('classes')
   const idx = classes.findIndex((c) => c.id === id)
   if (idx === -1) return res.status(404).json({ message: 'Không tìm thấy lớp học!' })

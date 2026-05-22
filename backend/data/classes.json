@@ -1,26 +1,38 @@
 [
   {
     "id": 1,
-    "code": "CNTT-K15A",
-    "name": "Công nghệ thông tin - Khóa 15 A",
-    "studentCount": 2,
+    "code": "CNTT-K15B",
+    "name": "Công nghệ thông tin - Khóa 15 B",
+    "studentCount": 3,
     "startTime": "2026-05-07",
-    "endTime": "2026-05-18"
+    "endTime": "2026-05-18",
+    "subjectId": 1
   },
   {
     "id": 2,
     "code": "KHMT-K16B",
     "name": "Khoa học máy tính - Khóa 16 B",
-    "studentCount": 0,
+    "studentCount": 1,
     "startTime": "2026-05-13",
-    "endTime": "2026-05-26"
+    "endTime": "2026-05-26",
+    "subjectId": 3
   },
   {
-    "id": 3,
-    "code": "jhgfd",
-    "name": "oiuytr",
-    "startTime": "2026-05-05",
+    "id": 5,
+    "code": "SE08101",
+    "name": "kỳ cuối",
+    "startTime": "2026-05-14",
+    "endTime": "2026-05-28",
+    "studentCount": 1,
+    "subjectId": 2
+  },
+  {
+    "id": 6,
+    "code": "SE07301",
+    "name": "K9",
+    "startTime": "2026-05-06",
     "endTime": "2026-05-29",
-    "studentCount": 1
+    "subjectId": 1,
+    "studentCount": 0
   }
 ]

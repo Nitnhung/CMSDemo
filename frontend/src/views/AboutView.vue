@@ -46,7 +46,7 @@
                 </td>
                 <td class="px-6 py-4">
                   <router-link 
-                    to="/class/CNTT-K15A" 
+                    to="/class/1" 
                     class="text-blue-600 hover:text-blue-800 font-medium hover:underline"
                   >
                     Xem chi tiết →
@@ -61,7 +61,7 @@
                 </td>
                 <td class="px-6 py-4">
                   <router-link 
-                    to="/class/KHMT-K16B" 
+                    to="/class/2" 
                     class="text-blue-600 hover:text-blue-800 font-medium hover:underline"
                   >
                     Xem chi tiết →

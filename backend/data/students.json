@@ -16,11 +16,35 @@
     "classId": 1
   },
   {
-    "id": 3,
-    "studentCode": "uytre",
-    "fullName": "jhgfds",
-    "dob": "2026-05-13",
+    "id": 4,
+    "studentCode": "bh02558",
+    "fullName": "Nguyễn A",
+    "dob": "2026-05-04",
+    "gender": "Nam",
+    "classId": 4
+  },
+  {
+    "id": 5,
+    "studentCode": "kjhgf",
+    "fullName": "iuytr",
+    "dob": "2026-05-07",
     "gender": "Nữ",
-    "classId": 3
+    "classId": 2
+  },
+  {
+    "id": 6,
+    "studentCode": "poiuytree",
+    "fullName": "-09876543",
+    "dob": "2026-05-23",
+    "gender": "Khác",
+    "classId": 5
+  },
+  {
+    "id": 7,
+    "studentCode": "pk",
+    "fullName": "pok",
+    "dob": "2026-05-05",
+    "gender": "Nữ",
+    "classId": 1
   }
 ]

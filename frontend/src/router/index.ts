@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from '../views/DashboardView.vue'
-import MainLayout from '../components/MainLayout.vue'
+import MainLayout from '../layout/MainLayout.vue'
 import ClassDetailView from '../views/ClassDetailView.vue'
 import StudentDetailView from '../views/StudentDetailView.vue'
 

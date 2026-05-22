@@ -13,12 +13,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
 const props = defineProps({
   variant: {
     type: String,
-    default: 'primary', // primary, secondary, danger, ghost
+    default: 'primary', // primary, secondary, danger, warning, link
   },
   type: {
     type: String,
@@ -38,3 +36,4 @@ const variantClasses = {
   link: 'text-blue-600 hover:underline p-0 focus:ring-blue-400',
 };
 </script>
+

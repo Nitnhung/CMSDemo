@@ -4,7 +4,7 @@ import { getAllStudents, getStudentsByClass, createStudent, updateStudent, delet
 const router = express.Router();
 
 router.get('/', getAllStudents);              // GET /api/students - Lấy toàn bộ sinh viên
-router.get('/:classId', getStudentsByClass);  // GET /api/students/:classId - Lấy sinh viên theo lớp
+router.get('/class/:classId', getStudentsByClass);  // GET /api/students/class/:classId - Lấy sinh viên theo lớp
 router.post('/', createStudent);             // POST /api/students - Thêm sinh viên mới
 router.put('/:id', updateStudent);    // Thêm dòng này
 router.delete('/:id', deleteStudent);

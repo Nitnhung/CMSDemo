@@ -1,11 +1,9 @@
-import client from '../client'
+import axiosClient from '../axiosClient';
+import { ENDPOINTS } from '../endpoints';
 
-const subjectsApi = {
-  getAll: () => client.get('/subjects'),
-  create: (data) => client.post('/subjects', data),
-  update: (id, data) => client.put(`/subjects/${id}`, data),
-  delete: (id) => client.delete(`/subjects/${id}`)
-}
-
-export default subjectsApi
-
+export default {
+  getAll: () => axiosClient.get(ENDPOINTS.SUBJECTS),
+  create: (data) => axiosClient.post(ENDPOINTS.SUBJECTS, data),
+  update: (id, data) => axiosClient.put(`${ENDPOINTS.SUBJECTS}/${id}`, data),
+  delete: (id) => axiosClient.delete(`${ENDPOINTS.SUBJECTS}/${id}`),
+};

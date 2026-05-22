@@ -10,5 +10,11 @@
     "code": "WEB203",
     "name": "Lập trình Web với VueJS",
     "credits": 4
+  },
+  {
+    "id": 3,
+    "code": "7430",
+    "name": "cấu trúc dữ liệu",
+    "credits": 10
   }
 ]
