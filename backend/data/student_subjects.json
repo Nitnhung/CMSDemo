@@ -18,5 +18,21 @@
   {
     "studentId": 6,
     "subjectId": 2
+  },
+  {
+    "studentId": 6,
+    "subjectId": 1
+  },
+  {
+    "studentId": 5,
+    "subjectId": 3
+  },
+  {
+    "studentId": 7,
+    "subjectId": 2
+  },
+  {
+    "studentId": 7,
+    "subjectId": 1
   }
 ]

@@ -38,5 +38,13 @@
     "dob": "2026-05-23",
     "gender": "Khác",
     "classId": 5
+  },
+  {
+    "id": 7,
+    "studentCode": "pk",
+    "fullName": "pok",
+    "dob": "2026-05-05",
+    "gender": "Nữ",
+    "classId": 1
   }
 ]
