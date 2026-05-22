@@ -44,8 +44,8 @@
 
 <script setup>
 import { reactive, watch } from 'vue'
-import BaseButton from '../BaseButton.vue'
-import BaseInput from '../BaseInput.vue'
+import BaseButton from '../base/BaseButton.vue'
+import BaseInput from '../base/BaseInput.vue'
 
 const props = defineProps({
   isOpen: Boolean,

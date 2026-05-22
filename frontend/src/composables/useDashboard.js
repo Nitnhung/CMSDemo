@@ -66,8 +66,8 @@ export function useDashboard() {
   const handleSubjectSubmit = async (data) => {
     try {
       selectedSubject.value 
-        ? await subjectService.update(selectedSubject.value.id, data) 
-        : await subjectService.create(data);
+        ? await subjectService.update(selectedSubject.value.id, data) // ? khi điều kiện đúng
+        : await subjectService.create(data);                          // : khi điều kiện sai
 
       loadData(); showSubjectModal.value = false;
     } catch (err) { alert(err.response?.data?.message) }

@@ -1,36 +1,39 @@
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-      <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <h3 class="text-lg font-bold text-gray-800">{{ editData ? 'Cập nhật lớp học' : 'Thêm lớp học mới' }}</h3>
-        <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600 transition-colors">&times;</button>
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden border border-gray-100">
+      <div class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="text-lg font-bold text-gray-800">
+          {{ editData ? 'Chỉnh Sửa Lớp Học' : 'Thêm Lớp Học Mới' }}
+        </h3>
+        <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600 text-xl font-semibold">&times;</button>
       </div>
-      
-      <form @submit.prevent="handleSubmit" class="p-6 space-y-4">
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-gray-600 uppercase">Mã lớp học</label>
-          <input v-model="form.code" type="text" placeholder="VD: CNTT-K15A" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required />
-        </div>
 
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-gray-600 uppercase">Tên lớp học</label>
-          <input v-model="form.name" type="text" placeholder="VD: Công nghệ thông tin A" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required />
+      <form @submit.prevent="handleSubmit" class="p-6 space-y-4">
+        <BaseInput v-model="formData.code" label="Mã lớp học" placeholder="Ví dụ: WD18301" required />
+        <BaseInput v-model="formData.name" label="Tên lớp học" placeholder="Ví dụ: Lập trình Mobile" required />
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Môn học áp dụng</label>
+          <select 
+            v-model="formData.subjectId" 
+            class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+            required
+          >
+            <option value="" disabled>-- Chọn môn học --</option>
+            <option v-for="sub in subjects" :key="sub.id" :value="sub.id">
+              {{ sub.name }} ({{ sub.code }})
+            </option>
+          </select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-gray-600 uppercase">Ngày bắt đầu</label>
-            <input v-model="form.startTime" type="date" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required />
-          </div>
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-gray-600 uppercase">Ngày kết thúc</label>
-            <input v-model="form.endTime" type="date" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required />
-          </div>
+          <BaseInput v-model="formData.startTime" label="Ngày bắt đầu" type="date" required />
+          <BaseInput v-model="formData.endTime" label="Ngày kết thúc" type="date" required />
         </div>
 
-        <div class="flex gap-3 pt-4">
-          <button type="button" @click="$emit('close')" class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">Hủy</button>
-          <button type="submit" class="flex-1 px-4 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 shadow-sm transition-colors">Lưu dữ liệu</button>
+        <div class="flex justify-end gap-3 pt-2">
+          <BaseButton variant="secondary" @click="$emit('close')">Hủy</BaseButton>
+          <BaseButton type="submit">{{ editData ? 'Cập nhật' : 'Tạo lớp' }}</BaseButton>
         </div>
       </form>
     </div>
@@ -38,33 +41,43 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { reactive, watch } from 'vue'
+import BaseButton from '../base/BaseButton.vue'
+import BaseInput from '../base/BaseInput.vue'
 
 const props = defineProps({
   isOpen: Boolean,
-  editData: Object
-})
-
-const emit = defineEmits(['close', 'submit'])
-
-const form = ref({
-  code: '',
-  name: '',
-  startTime: '',
-  endTime: ''
-})
-
-watch(() => props.isOpen, (newVal) => {
-  if (newVal) {
-    if (props.editData) {
-      form.value = { ...props.editData }
-    } else {
-      form.value = { code: '', name: '', startTime: '', endTime: '' }
-    }
+  editData: Object,
+  subjects: {
+    type: Array,
+    default: () => []
   }
 })
+const emit = defineEmits(['close', 'submit'])
+
+const formData = reactive({ 
+  code: '', 
+  name: '', 
+  startTime: '', 
+  endTime: '', 
+  subjectId: '' 
+})
+
+watch(() => [props.isOpen, props.editData], ([isOpen, editData]) => {
+  if (isOpen) {
+    if (editData) {
+      formData.code = editData.code
+      formData.name = editData.name
+      formData.startTime = editData.startTime
+      formData.endTime = editData.endTime
+      formData.subjectId = editData.subjectId
+    } else {
+      Object.assign(formData, { code: '', name: '', startTime: '', endTime: '', subjectId: '' })
+    }
+  }
+}, { immediate: true })
 
 const handleSubmit = () => {
-  emit('submit', { ...form.value })
+  emit('submit', { ...formData, subjectId: Number(formData.subjectId) })
 }
 </script>

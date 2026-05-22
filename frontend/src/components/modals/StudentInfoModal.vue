@@ -5,7 +5,7 @@
       <!-- Header -->
       <div class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
         <h3 class="text-lg font-bold text-gray-800">Thông tin chi tiết sinh viên</h3>
-        <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600 text-xl font-semibold">&times;</button>
+        <BaseButton variant="ghost" size="sm" @click="$emit('close')" class="text-xl">&times;</BaseButton>
       </div>
 
       <!-- Content -->
@@ -54,17 +54,15 @@
           <!-- Add Subject Section -->
           <div class="mt-4 pt-4 border-t border-gray-100">
             <h5 class="font-semibold text-gray-700 mb-2">Thêm môn học mới</h5>
-            <div class="flex gap-2">
-              <select v-model="selectedSubjectId" class="border border-gray-300 rounded-lg p-2 text-sm flex-1 focus:ring-blue-500 focus:border-blue-500">
-                <option value="">-- Chọn môn học --</option>
-                <option v-for="sub in availableSubjects" :key="sub.id" :value="sub.id">
-                  {{ sub.name }} ({{ sub.code }})
-                </option>
-              </select>
-              <button 
-                @click="handleAddSubject" 
-                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-              >Thêm</button>
+            <div class="flex items-end gap-2">
+              <div class="flex-1">
+                <BaseSelect 
+                  v-model="selectedSubjectId"
+                  :options="availableSubjects.map(s => ({ label: `${s.name} (${s.code})`, value: s.id }))"
+                  placeholder="-- Chọn môn học --"
+                />
+              </div>
+              <BaseButton variant="primary" @click="handleAddSubject">Thêm</BaseButton>
             </div>
           </div>
         </div>
@@ -72,12 +70,7 @@
 
       <!-- Footer -->
       <div class="px-6 py-4 bg-gray-50 border-t flex justify-end">
-        <button 
-          @click="$emit('close')" 
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-        >
-          Đóng
-        </button>
+        <BaseButton variant="secondary" @click="$emit('close')">Đóng</BaseButton>
       </div>
     </div>
   </div>
@@ -85,6 +78,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import BaseButton from '../base/BaseButton.vue'
+import BaseSelect from '../base/BaseSelect.vue'
 
 const props = defineProps({
   isOpen: Boolean,

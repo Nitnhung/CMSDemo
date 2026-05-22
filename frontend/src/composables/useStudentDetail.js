@@ -5,7 +5,8 @@ import studentSubjectsService from '../services/studentSubjectsService'
 
 export function useStudentDetail() {
   const route = useRoute()
-  const currentClassId = computed(() => route.params.id)
+  const currentClassId = computed(() => Number(route.params.id)) 
+  //dùng computed để currentClassId được load ngay sau khi component/composable được khởi tạo và nó sẽ luôn thay đổi theo URL khi URL thay đổi
   const studentsList = ref([])
   const isLoading = ref(false)
 
